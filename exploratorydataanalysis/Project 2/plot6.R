@@ -27,12 +27,3 @@ xyplot(data.plot6$sum ~ data.plot6$year | data.plot6$fips,
        xlab="year",
        ylab="PM2.5 emission (in thousands)")
 dev.off()
-
-
-g <-qplot(year,sum,data=data.plot6)
-g + facet_wrap(~ fips, ncol=2,scales = "free_y") + 
-    xlab("Year") + ylab("Emission") +
-    ggtitle("PM2.5 emission from motor vehicle sources \nin Baltimore City and LA 1999-2008") +
-    geom_smooth()
-x<-dget("data.plot6.R")
-x$fips<-factor(x=x$fips, labels=c("LA","Baltimore"))

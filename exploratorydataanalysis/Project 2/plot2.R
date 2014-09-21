@@ -1,10 +1,3 @@
-## reading data and R packages
-data<-readRDS("summarySCC_PM25.rds")
-classification<-readRDS("Source_Classification_Code.rds")
-library(plyr)
-library(ggplot2)
-library(data.table)
-
 ## Plot 2
 ## Have total emissions from PM2.5 decreased 
 ## in the Baltimore City, Maryland (fips == "24510") from 1999 to 2008?
@@ -15,9 +8,6 @@ classification<-readRDS("Source_Classification_Code.rds")
 library(plyr)
 library(ggplot2)
 
-## Plot 2
-## Have total emissions from PM2.5 decreased 
-## in the Baltimore City, Maryland (fips == "24510") from 1999 to 2008?
 
 ## preparing data
 subset.Baltimore<-data[data$fips == "24510",]
