@@ -53,7 +53,7 @@ mean(): Mean value
 std(): Standard deviation
 
 
-In the final dataset (named "result"), an average of each of these variables was calculated for each subject and each activity. First two columns, named "Subject" and "Activity" are factors showing for which subject and for which activity the data are calculated. In all subsequent columns, the average for the mean and standard deviation of each feature named above is calculated. Therefore, here's the complete list of variables in the final dataset:
+In the final dataset, an average of each of these variables was calculated for each subject and each activity. First two columns, named "Subject" and "Activity" are factors showing for which subject and for which activity the data are calculated. In all subsequent columns, the average for the mean and standard deviation of each feature named above is calculated. Therefore, here's the complete list of variables in the final dataset:
 
 
 Subject
