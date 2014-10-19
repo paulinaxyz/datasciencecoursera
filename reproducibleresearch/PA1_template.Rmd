@@ -1,0 +1,86 @@
+---
+output: html_document
+---
+##Loading and preprocessing the data
+
+```{r readingdata, cache=TRUE}
+url = "http://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+download.file(url,destfile="data.zip")
+unzip("data.zip")
+data<-read.csv("activity.csv")
+data$date<-as.Date(data$date)
+```
+
+##What is mean total number of steps taken per day?
+
+```{r plot1}
+library(plyr)
+data1<-ddply(data,.(date), summarize,sum=sum(steps))
+hist(data1$sum, col="blue3",
+     main="Plot 1. Histogram of number of steps taken",
+     xlab="number of steps taken", ylab="frequency")
+mean<-mean(data1$sum,na.rm=T)
+median<-median(data1$sum,na.rm=T)
+```
+
+Average number of steps taken per day is `r as.integer(mean)`.
+Median of number of steps taken per day is `r as.integer(median)`.
+
+##Imputing missing values
+
+```{r missing}
+sum.na=sum(is.na(data$steps))
+pct.na=round(100*sum.na/nrow(data))
+```
+
+The number of missing observations is `r sum.na`,
+which makes up `r pct.na`% of the observations.
+
+The missing value for will be replaced with mean for each given interval.
+```{r imputing}
+data$na.replace<-ave(data$steps,data$interval, FUN=function(x) mean(x[!is.na(x)]))
+data$steps[is.na(data$steps)]<-data$na.replace[is.na(data$steps)]
+```
+
+Revised plot 1 after imputing the missing data
+```{r plot1.revised}
+data1.revised<-ddply(data,.(date), summarize,sum=sum(steps))
+hist(data1.revised$sum, col="blue3",
+     main="Plot 1b. Histogram of number of steps taken",
+     xlab="number of steps taken", ylab="frequency")
+mean<-mean(data1.revised$sum,na.rm=T)
+median<-median(data1.revised$sum,na.rm=T)
+```
+Average number of steps taken per day is `r as.integer(mean)`.
+Median of number of steps taken per day is `r as.integer(median)`.
+
+
+##What is the average daily activity pattern?
+
+```{r plot2}
+data2<-ddply(data,.(interval), summarize, avg=mean(steps))
+plot(data2$interval, data2$avg, type="l", col="blue4",
+     main="Plot 2. Average number of steps taken during each interval",
+     xlab="interval", ylab="average number of steps taken")
+max<-data2$interval[data2$avg==max(data2$avg)]
+```
+The interval that contains on average the maximum number of steps 
+is interval `r max`
+
+##Are there differences in activity patterns between weekdays and weekends?
+
+``` {r days} 
+day<-sapply(data$date, FUN=function(x) 
+  {if(weekdays(x, abbreviate=T)=="So"|weekdays(x, abbreviate=T)=="Nd") x<-2
+   else x<-1})
+data$day<-factor(day,c(1,2),c("weekday","weekend"))
+```
+
+``` {r plot3}
+library(ggplot2)
+data3<-ddply(data,.(day,interval), summarize, avg=mean(steps))
+qplot(interval,avg, data=data3,facets=day~.,geom="line",
+      xlab="interval", ylab="average number of steps taken")
+```
+
+
