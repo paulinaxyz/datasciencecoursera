@@ -1,4 +1,6 @@
-
+---
+output: html_document
+---
 ##Loading and preprocessing the data
 
 ```{r readingdata, cache=TRUE}
